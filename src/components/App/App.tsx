@@ -1,21 +1,21 @@
-import css from "./App.module.css";
+import css from './App.module.css';
 
-import { useState } from "react";
-import NoteList from "../NoteList/NoteList";
-import Pagination from "../Pagination/Pagination";
-import SearchBox from "../SearchBox/SearchBox";
-import Modal from "../Modal/Modal";
-import NoteForm from "../NoteForm/NoteForm";
-import { useQuery } from "@tanstack/react-query";
-import { fetchNotes } from "../../services/noteService";
-import { useDebouncedCallback } from "use-debounce";
-import useModal from "../hooks/useModal";
+import { useState } from 'react';
+import NoteList from '../NoteList/NoteList';
+import Pagination from '../Pagination/Pagination';
+import SearchBox from '../SearchBox/SearchBox';
+import Modal from '../Modal/Modal';
+import NoteForm from '../NoteForm/NoteForm';
+import { useQuery } from '@tanstack/react-query';
+import { fetchNotes } from '../../services/noteService';
+import { useDebouncedCallback } from 'use-debounce';
+import useModal from '../hooks/useModal';
 
 export default function App() {
   const { isOpen, open, close } = useModal();
 
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const debouncedSearch = useDebouncedCallback((value: string) => {
     setSearch(value);
@@ -23,8 +23,10 @@ export default function App() {
   }, 500);
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["notes", page, search],
+    queryKey: ['notes', page, search],
     queryFn: () => fetchNotes({ page, perPage: 12, search }),
+
+    placeholderData: previousData => previousData,
   });
 
   return (
